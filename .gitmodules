@@ -1,0 +1,9 @@
+[submodule "Vendor/openvr"]
+	path = Vendor/openvr
+	url = https://github.com/ValveSoftware/openvr.git
+[submodule "Vendor/hekky-osc"]
+	path = Vendor/hekky-osc
+	url = https://github.com/hyblocker/hekky-osc
+[submodule "Vendor/imgui"]
+	path = Vendor/imgui
+	url = https://github.com/ocornut/imgui
