@@ -285,79 +285,79 @@ void transformData(controller_State &state) {
 void sendOSCData(App_State &state) {
 
     //Hand Curl data send
-    auto thumbLeftCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Thumb_Curl");
+    auto thumbLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Thumb_Curl");
     thumbLeftCurl.PushFloat(state.left.Curl.thumb);
     state.oscSender->Send(thumbLeftCurl);
 
-    auto indexLeftCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Index_Curl");
+    auto indexLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Index_Curl");
     indexLeftCurl.PushFloat(state.left.Curl.index);
     state.oscSender->Send(indexLeftCurl);
 
-    auto middleLeftCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Middle_Curl");
+    auto middleLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Middle_Curl");
     middleLeftCurl.PushFloat(state.left.Curl.middle);
     state.oscSender->Send(middleLeftCurl);
 
-    auto ringLeftCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Ring_Curl");
+    auto ringLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Ring_Curl");
     ringLeftCurl.PushFloat(state.left.Curl.ring);
     state.oscSender->Send(ringLeftCurl);
 
-    auto pinkyLeftCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Pinky_Curl");
+    auto pinkyLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Pinky_Curl");
     pinkyLeftCurl.PushFloat(state.left.Curl.pinky);
     state.oscSender->Send(pinkyLeftCurl);
 
     //hand Splay Data
-    auto thumbLeftSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Thumb_Splay");
+    auto thumbLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Thumb_Splay");
     thumbLeftSplay.PushFloat(state.left.Splay.thumb);
     state.oscSender->Send(thumbLeftSplay);
 
-    auto indexLeftSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Index_Splay");
+    auto indexLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Index_Splay");
     indexLeftSplay.PushFloat(state.left.Splay.index);
     state.oscSender->Send(indexLeftSplay);
 
-    auto ringLeftSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Ring_Splay");
+    auto ringLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Ring_Splay");
     ringLeftSplay.PushFloat(state.left.Splay.ring);
     state.oscSender->Send(ringLeftSplay);
 
-    auto pinkyLeftSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Left/Pinky_Splay");
+    auto pinkyLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Pinky_Splay");
     pinkyLeftSplay.PushFloat(state.left.Splay.pinky);
     state.oscSender->Send(pinkyLeftSplay);
 
 
     //Right Hand
-    auto thumbRightCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Thumb_Curl");
+    auto thumbRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Thumb_Curl");
     thumbRightCurl.PushFloat(state.right.Curl.thumb);
     state.oscSender->Send(thumbRightCurl);
 
-    auto indexRightCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Index_Curl");
+    auto indexRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Index_Curl");
     indexRightCurl.PushFloat(state.right.Curl.index);
     state.oscSender->Send(indexRightCurl);
 
-    auto middleRightCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Middle_Curl");
+    auto middleRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Middle_Curl");
     middleRightCurl.PushFloat(state.right.Curl.middle);
     state.oscSender->Send(middleRightCurl);
 
-    auto ringRightCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Ring_Curl");
+    auto ringRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Ring_Curl");
     ringRightCurl.PushFloat(state.right.Curl.ring);
     state.oscSender->Send(ringRightCurl);
 
-    auto pinkyRightCurl = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Pinky_Curl");
+    auto pinkyRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Pinky_Curl");
     pinkyRightCurl.PushFloat(state.right.Curl.pinky);
     state.oscSender->Send(pinkyRightCurl);
 
     //hand Splay Data
-    auto thumbRightSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Thumb_Splay");
+    auto thumbRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Thumb_Splay");
     thumbRightSplay.PushFloat(state.right.Splay.thumb);
     state.oscSender->Send(thumbRightSplay);
 
-    auto indexRightSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Index_Splay");
+    auto indexRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Index_Splay");
     indexRightSplay.PushFloat(state.right.Splay.index);
     state.oscSender->Send(indexRightSplay);
 
-    auto ringRightSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Ring_Splay");
+    auto ringRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Ring_Splay");
     ringRightSplay.PushFloat(state.right.Splay.ring);
     state.oscSender->Send(ringRightSplay);
 
-    auto pinkyRightSplay = hekky::osc::OscMessage("/avatar/parameters/EnhancedHands/Tracking/Right/Pinky_Splay");
+    auto pinkyRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Pinky_Splay");
     pinkyRightSplay.PushFloat(state.right.Splay.pinky);
     state.oscSender->Send(pinkyRightSplay);
 }
