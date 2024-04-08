@@ -490,11 +490,6 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
-# Visual Studio
-*.sln
-*.vcxproj
-*.vcxproj.filters
-
 # Visual Studio Code
 .vscode
 
