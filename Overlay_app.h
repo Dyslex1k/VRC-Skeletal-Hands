@@ -1,5 +1,6 @@
 #pragma once
 
+#include "User_Interface.h"
 #include <openvr.h>
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -7,7 +8,6 @@
 #include <imgui_impl_dx11.h>
 #include <d3d11.h>
 
-#include "App_State.h"
 
 namespace EpicOverlay {
     namespace Overlay {

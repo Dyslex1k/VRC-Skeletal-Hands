@@ -1,5 +1,4 @@
 #include "Overlay_app.h"
-#include "User_Interface.h"
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -30,9 +29,9 @@ namespace EpicOverlay {
         bool StartWindow() {
             // Create application window
             //ImGui_ImplWin32_EnableDpiAwareness();
-            g_wc = { sizeof(g_wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"EpicOverlayWindow", nullptr };
+            g_wc = { sizeof(g_wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"VRCSkeletalHandsWindow", nullptr };
             ::RegisterClassExW(&g_wc);
-            g_hwnd = ::CreateWindowW(g_wc.lpszClassName, L"Epic Overlay Settings", WS_OVERLAPPEDWINDOW, 100, 100, g_windowWidth, g_windowHeight, nullptr, nullptr, g_wc.hInstance, nullptr);
+            g_hwnd = ::CreateWindowW(g_wc.lpszClassName, L"Skeletal Hands Settings", WS_OVERLAPPEDWINDOW, 100, 100, g_windowWidth, g_windowHeight, nullptr, nullptr, g_wc.hInstance, nullptr);
 
             // Initialize Direct3D
             if (!CreateDeviceD3D(g_hwnd))
@@ -266,7 +265,7 @@ namespace EpicOverlay {
 
                         vr::VROverlay()->ShowKeyboardForOverlay(
                             overlayMainHandle, vr::k_EGamepadTextInputModeNormal, vr::k_EGamepadTextInputLineModeSingleLine,
-                            unFlags, "Epic Overlay", sizeof s_textBuf, s_textBuf, 0
+                            unFlags, "VRC Skeletal Hands", sizeof s_textBuf, s_textBuf, 0
                         );
                         keyboardOpen = true;
                     }
