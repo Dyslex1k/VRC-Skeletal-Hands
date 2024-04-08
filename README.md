@@ -26,4 +26,4 @@ This is the current Idea on how this would work though due to my personal life a
 - When SteamVr Overlay is up all hand tracking stops working.
 - Touch Controllers have no gesture system.
 - Does not support upper and lower finger curl. (DiverX Gloves)
-- Currently doesn't sync for remote users.
+- Currently uses a large about of bit space to sync remote users.
