@@ -3,6 +3,7 @@ This is an OSC based Solution to Skeletal Hand tracking in VRChat developed by D
 
 ### Demo with Valve Knuckles
 https://github.com/Dyslex1k/VRC-Skeletal-Hands/assets/102997160/c82dad26-7023-4138-a80e-bdbb67e895fd
+
 The first part is VRChats current finger tracking and when the toggles are enabled the VRCSH system is enabled.
 
 
