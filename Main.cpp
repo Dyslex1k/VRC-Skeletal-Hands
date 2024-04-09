@@ -362,7 +362,14 @@ void sendOSCData(App_State &state) {
     state.oscSender->Send(pinkyRightSplay);
 }
 
+#ifdef _DEBUG
 int main() {
+#else
+int APIENTRY wWinMain(HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPTSTR    lpCmdLine,
+    int       nCmdShow){
+#endif
     App_State state;
 
     InitVR(state);
@@ -380,6 +387,7 @@ int main() {
             sendOSCData(state);
 
 			doExectute = EpicOverlay::Overlay::UpdateNativeWindow(s_overlayMainHandle, state);
+            Sleep(8);
 		}
 		EpicOverlay::Overlay::DestroyWindow();
 	}

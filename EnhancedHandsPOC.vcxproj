@@ -96,11 +96,13 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Vendor\hekky-osc\include;$(SolutionDir)Vendor\imgui\backends;$(SolutionDir)Vendor\imgui;$(SolutionDir)Vendor\openvr\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)Vendor\openvr\lib\win64\openvr_api.lib;$(SolutionDir)$(Platform)\$(Configuration)\hekky-osc.lib;dxgi.lib;d3d11.lib;d3dcompiler.lib</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,11 +130,13 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Vendor\hekky-osc\include;$(SolutionDir)Vendor\imgui\backends;$(SolutionDir)Vendor\imgui;$(SolutionDir)Vendor\openvr\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)Vendor\openvr\lib\win64\openvr_api.lib;$(SolutionDir)$(Platform)\$(Configuration)\hekky-osc.lib;dxgi.lib;d3d11.lib;d3dcompiler.lib</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
