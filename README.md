@@ -9,7 +9,7 @@ The first part is VRChats current finger tracking and when the toggles are enabl
 
 # How to set up
 1) Add the unity package to your project.
-2) Add the VRCFury/ Modular Avatar Prefab to your model in the Highrachy.
+2) Add the VRCFury/ Modular Avatar Prefab to your model in the hierarchy.
 3) When in vr Launch the app.
 4) Enable the Skeletal input in the quick menu.
 
