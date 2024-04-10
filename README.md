@@ -13,6 +13,9 @@ The first part is VRChats current finger tracking and when the toggles are enabl
 3) When in vr Launch the app.
 4) Enable the Skeletal input in the quick menu.
 
+## Updates?
+I will be working on reducing Bit count and adding the Proximal and Distal Curl values so devices like the DiverX gloves or "True" Finger tracked devices can be animated better. You can expect to see this in a week or two if all goes well!
+
 ## Syncing In VRChat
 Currently syncing the parameters requires 144bits of data (This is too much) I figured out a potential way of halving it though I may not develop due to information about better input for VRChat coming soon. Though if you want
 you want to develop a solution please do and create a Pull Request.
