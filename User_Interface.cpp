@@ -23,11 +23,11 @@ void drawDataTable(controller_State state) {
 		ImGui::TableNextRow();
 		ImGui::TableNextColumn();
 
-		buildInternal(state.Curl.thumb, state.Splay.thumb, "Thumb");
-		buildInternal(state.Curl.index, state.Splay.index, "Index");
-		buildInternal(state.Curl.middle, state.Splay.middle, "Middle");
-		buildInternal(state.Curl.ring, state.Splay.ring, "Ring");
-		buildInternal(state.Curl.pinky, state.Splay.pinky, "Pinky");
+		//buildInternal(state.Curl.thumb, state.Splay.thumb, "Thumb");
+		//buildInternal(state.Curl.index, state.Splay.index, "Index");
+		//buildInternal(state.Curl.middle, state.Splay.middle, "Middle");
+		//buildInternal(state.Curl.ring, state.Splay.ring, "Ring");
+		//buildInternal(state.Curl.pinky, state.Splay.pinky, "Pinky");
 
 	}
 	ImGui::EndTable();
@@ -60,8 +60,17 @@ void DrawUi(bool isOverlay, App_State& state){
 
 	ImGui::Begin("VRC Skeletal Hands", &skeletalHandsActive, 1);
 
-	drawController(state.left, true);
-	drawController(state.right, false);
+	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.x);
+	ImGui::Spacing();
+	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.y);
+	ImGui::Spacing();
+	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.z);
+	ImGui::Spacing();
+	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.w);
+	ImGui::Spacing();
+
+	//drawController(state.left, true);
+	//drawController(state.right, false);
 
 	ImGui::End();
 }

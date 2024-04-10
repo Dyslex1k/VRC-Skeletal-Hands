@@ -255,111 +255,66 @@ void updateControllerState(controller_State& state, App_State& appState) {
     //Get Skeletal DataInfo
     vr::VRInput()->GetSkeletalActionData(state.inputHandles.skeletal, &state.skeletalData, 1);
 
+    //Get Skeletal summary for splay
     if (state.inputHandles.skeletal != vr::k_ulInvalidInputValueHandle) {
         vr::VRInput()->GetSkeletalSummaryData(state.inputHandles.skeletal, vr::VRSummaryType_FromDevice, &state.skeletonSumary);
     }
+
+    //GetBoneData saves to ControllerState.boneTransforms
+    vr::VRInput()->GetSkeletalBoneData(state.inputHandles.skeletal,vr::EVRSkeletalTransformSpace::VRSkeletalTransformSpace_Model, vr::EVRSkeletalMotionRange::VRSkeletalMotionRange_WithoutController, state.boneTransforms, SKELETAL_BONE_COUNT);
 }
 
-float calcFingerCurl(controller_State &state, vr::EVRFinger finger){
-    if (state.skeletonSumary.flFingerCurl[finger] > 0.75) {
-        return state.skeletonSumary.flFingerCurl[finger] + state.force.x;
-    }
-    return state.skeletonSumary.flFingerCurl[finger];
+
+float getBoneCurl(HandSkeletonBone boneA, HandSkeletonBone boneB, controller_State &state){
+    vr::HmdQuaternionf_t a = state.boneTransforms[boneA].orientation;
+    vr::HmdQuaternionf_t b = state.boneTransforms[boneB].orientation;
+
+    return 1.0f;
+}
+
+float getBoneSplay(HandSkeletonBone bone, controller_State &state) {
+    return 1.0f;
+}
+
+//Function that transforms the bone rotations into curl values that are used in Vrchat
+void transformBoneData(controller_State &state) {
+    //Save data to floats
+
+    //Calculate thumb (Humans are annoying)
+    //state.Hand.thumb.distal.curl = getBoneCurl();
+    //state.Hand.thumb.proximal.curl = getBoneCurl();
+    //state.Hand.index.proximal.splay = getBoneSplay();
+
+
+    //Calculate fingers from index -> pinky
+
+    //Index
+    state.Hand.index.distal.curl = getBoneCurl(HandSkeletonBone::eBone_IndexFinger3, HandSkeletonBone::eBone_IndexFinger1, state);
+    state.Hand.index.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_IndexFinger3, HandSkeletonBone::eBone_Wrist, state);
+    state.Hand.index.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_IndexFinger1, state);
+
+    //Middle
+    state.Hand.middle.distal.curl = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_MiddleFinger1, state);
+    state.Hand.middle.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_Wrist, state);
+    state.Hand.middle.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_MiddleFinger1, state);
+
+    //Ring
+    state.Hand.ring.distal.curl = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_RingFinger1, state);
+    state.Hand.ring.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_Wrist, state);
+    state.Hand.ring.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_RingFinger1, state);
+
+    //Pinky
+    state.Hand.pinky.distal.curl = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_PinkyFinger1, state);
+    state.Hand.pinky.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_Wrist, state);
+    state.Hand.pinky.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_PinkyFinger1, state);
 }
 
 void transformData(controller_State &state) {
-    state.Curl.thumb = calcFingerCurl(state, vr::VRFinger_Thumb);
-    state.Curl.index = calcFingerCurl(state, vr::VRFinger_Index);
-    state.Curl.middle = calcFingerCurl(state, vr::VRFinger_Middle);
-    state.Curl.ring = calcFingerCurl(state, vr::VRFinger_Ring);
-    state.Curl.pinky = calcFingerCurl(state, vr::VRFinger_Pinky);
-
-    state.Splay.thumb = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Thumb_Index];
-    state.Splay.index = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Index_Middle];
-    state.Splay.ring = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Middle_Ring];
-    state.Splay.pinky = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Ring_Pinky];
-
-    //@TODO Change the splay to use propper splay values from the inbetween values
+    //@TODO Set all hand values Distal & Proximal Curl & Splay
 }
 
 void sendOSCData(App_State &state) {
-
-    //Hand Curl data send
-    auto thumbLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Thumb_Curl");
-    thumbLeftCurl.PushFloat(state.left.Curl.thumb);
-    state.oscSender->Send(thumbLeftCurl);
-
-    auto indexLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Index_Curl");
-    indexLeftCurl.PushFloat(state.left.Curl.index);
-    state.oscSender->Send(indexLeftCurl);
-
-    auto middleLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Middle_Curl");
-    middleLeftCurl.PushFloat(state.left.Curl.middle);
-    state.oscSender->Send(middleLeftCurl);
-
-    auto ringLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Ring_Curl");
-    ringLeftCurl.PushFloat(state.left.Curl.ring);
-    state.oscSender->Send(ringLeftCurl);
-
-    auto pinkyLeftCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Pinky_Curl");
-    pinkyLeftCurl.PushFloat(state.left.Curl.pinky);
-    state.oscSender->Send(pinkyLeftCurl);
-
-    //hand Splay Data
-    auto thumbLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Thumb_Splay");
-    thumbLeftSplay.PushFloat(state.left.Splay.thumb);
-    state.oscSender->Send(thumbLeftSplay);
-
-    auto indexLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Index_Splay");
-    indexLeftSplay.PushFloat(state.left.Splay.index);
-    state.oscSender->Send(indexLeftSplay);
-
-    auto ringLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Ring_Splay");
-    ringLeftSplay.PushFloat(state.left.Splay.ring);
-    state.oscSender->Send(ringLeftSplay);
-
-    auto pinkyLeftSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Left/Pinky_Splay");
-    pinkyLeftSplay.PushFloat(state.left.Splay.pinky);
-    state.oscSender->Send(pinkyLeftSplay);
-
-
-    //Right Hand
-    auto thumbRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Thumb_Curl");
-    thumbRightCurl.PushFloat(state.right.Curl.thumb);
-    state.oscSender->Send(thumbRightCurl);
-
-    auto indexRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Index_Curl");
-    indexRightCurl.PushFloat(state.right.Curl.index);
-    state.oscSender->Send(indexRightCurl);
-
-    auto middleRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Middle_Curl");
-    middleRightCurl.PushFloat(state.right.Curl.middle);
-    state.oscSender->Send(middleRightCurl);
-
-    auto ringRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Ring_Curl");
-    ringRightCurl.PushFloat(state.right.Curl.ring);
-    state.oscSender->Send(ringRightCurl);
-
-    auto pinkyRightCurl = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Pinky_Curl");
-    pinkyRightCurl.PushFloat(state.right.Curl.pinky);
-    state.oscSender->Send(pinkyRightCurl);
-
-    //hand Splay Data
-    auto thumbRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Thumb_Splay");
-    thumbRightSplay.PushFloat(state.right.Splay.thumb);
-    state.oscSender->Send(thumbRightSplay);
-
-    auto indexRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Index_Splay");
-    indexRightSplay.PushFloat(state.right.Splay.index);
-    state.oscSender->Send(indexRightSplay);
-
-    auto ringRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Ring_Splay");
-    ringRightSplay.PushFloat(state.right.Splay.ring);
-    state.oscSender->Send(ringRightSplay);
-
-    auto pinkyRightSplay = hekky::osc::OscMessage("/avatar/parameters/SH/Tracking/Right/Pinky_Splay");
-    pinkyRightSplay.PushFloat(state.right.Splay.pinky);
-    state.oscSender->Send(pinkyRightSplay);
+    //@TODO Send data to the send parameters (Raw and Compressed) NOTE:Needs to be interlaced
 }
 
 #ifdef _DEBUG
