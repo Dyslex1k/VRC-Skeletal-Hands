@@ -32,7 +32,7 @@ You can see an example of the Blend tree for 1 parameter here:
  
 This is the current Idea on how this would work though due to my personal life and VRChats solution being "Very Close" I will not spend to making this. Though if VRChat hasn't implemeted this in a month I will work on making this solution a reality!
 ## Known Issues
-- When SteamVr Overlay is up all hand tracking stops working.
+- Hand tracking doesn't work if the steamVr overlay is open (Just close steamVr overlay to fix the issue).
 - Touch Controllers have no gesture system.
-- Does not support upper and lower finger curl. (DiverX Gloves)
-- Currently uses a large about of bit space to sync remote users.
+- Does not support upper and lower finger curl. (DiverX Gloves) 
+- Currently uses a large about of bit space to sync remote users. (You can use no sync templates avoid this)
