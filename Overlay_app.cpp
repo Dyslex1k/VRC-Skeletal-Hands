@@ -1,7 +1,11 @@
 #include "Overlay_app.h"
+#include <thread>
+
 
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+#define MINIMISE_MAX_FPS 60
 
 namespace EpicOverlay {
     namespace Overlay {
@@ -19,12 +23,25 @@ namespace EpicOverlay {
         static BOOL                     s_windowVisible = true;
         static char                     s_textBuf[0x400];
 
+        static double s_lastFrameStartTime = 0;
+
         // Forward declarations of helper functions
         bool CreateDeviceD3D(HWND hWnd);
         void CleanupDeviceD3D();
         void CreateRenderTarget();
         void CleanupRenderTarget();
         LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+        double getSystemTimeSeconds() {
+            LARGE_INTEGER t1 = {};
+            LARGE_INTEGER freq = {};
+
+            // High resolution windows only clocks
+            QueryPerformanceCounter(&t1);
+            QueryPerformanceFrequency(&freq);
+
+            return static_cast<double>(t1.QuadPart) / static_cast<double>(freq.QuadPart);
+        }
 
         bool StartWindow() {
             // Create application window
@@ -77,6 +94,15 @@ namespace EpicOverlay {
             //IM_ASSERT(font != nullptr);
 
             SetupImgui();
+
+            // Lock the main thread to the current core
+            uint32_t desiredLogicalCore = 1; // @TODO: Change so that we can lock the thread onto a CPU core dynamically after querying system information
+            // This is a bit mask where each bit corresponds to a logical core on the current system. We want to pin this thread onto a single core so that timings info is consistent
+            // Set the bit at 'desiredLogicalCore' to 1
+            uint64_t threadAffinityMask = 1ULL << desiredLogicalCore;
+            SetThreadAffinityMask(GetCurrentThread(), threadAffinityMask);
+
+            s_lastFrameStartTime = getSystemTimeSeconds();
 
             return true;
         }
@@ -358,6 +384,14 @@ namespace EpicOverlay {
                     vr::VROverlay()->SetOverlayTexture(overlayMainHandle, &vrTex);
                     vr::VROverlay()->SetOverlayMouseScale(overlayMainHandle, &mouseScale);
                 }
+            } 
+            else {
+                double targetFrameTime = 1.0/MINIMISE_MAX_FPS;
+                double waitTime = targetFrameTime - (getSystemTimeSeconds() - s_lastFrameStartTime);
+                if (waitTime > 0) {
+                    std::this_thread::sleep_for(std::chrono::duration<double>(waitTime));
+                }
+                s_lastFrameStartTime += targetFrameTime;
             }
 
             return true;
