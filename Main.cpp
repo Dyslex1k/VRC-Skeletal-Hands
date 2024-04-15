@@ -21,6 +21,25 @@ static vr::VROverlayHandle_t s_overlayThumbnailHandle;
 
 bool loadInputs(App_State& state);
 
+static std::string getExecutableDir() {
+    //Get path to exe (includes the exe file name)
+    //CHAR executablePath[MAX_PATH];
+    std::string executablePath(MAX_PATH, '\0');
+    GetModuleFileNameA(nullptr, &executablePath[0], MAX_PATH);
+
+    //Get directory path
+    std::string executableDir;
+    const size_t lastSlashIndex = executablePath.rfind('\\');
+    if (std::string::npos != lastSlashIndex) {
+        executableDir = executablePath.substr(0, lastSlashIndex);
+    }
+    else {
+        std::cerr << "Invalid Executable Path Aborting\n";
+        return "";
+    }
+    return executableDir;
+}
+
 bool InitVR(App_State& state)
 {
     auto initError = vr::VRInitError_None;
@@ -55,22 +74,7 @@ bool loadInputs(App_State &state) {
     //Trys to open the Action manifest 
     std::string actionManifestPath = "action_manifest.json";
 
-    //Get path to exe (includes the exe file name)
-    //CHAR executablePath[MAX_PATH];
-    std::string executablePath(MAX_PATH, '\0');
-    GetModuleFileNameA(nullptr, &executablePath[0], MAX_PATH);
-
-    //Get directory path
-    std::string executableDir;
-    const size_t lastSlashIndex = executablePath.rfind('\\');
-    if (std::string::npos != lastSlashIndex) {
-        executableDir = executablePath.substr(0, lastSlashIndex);
-        actionManifestPath = executableDir + "\\" + actionManifestPath;
-    }
-    else {
-        std::cerr << "Invalid Executable Path Aborting\n";
-        return false;
-    }
+    actionManifestPath = getExecutableDir() + "\\" + actionManifestPath;
 
     auto error = vr::VRInput()->SetActionManifestPath(actionManifestPath.c_str());
     if (error != vr::EVRInputError::VRInputError_None)
@@ -134,7 +138,7 @@ void TryCreateVrOverlay() {
     );
 
     if (err == vr::VROverlayError_KeyInUse) {
-        throw std::runtime_error("Another instance of EpicOverlay is already running!");
+        throw std::runtime_error("Another instance of VRCSkeletalHands is already running!");
     }
     else if (err != vr::VROverlayError_None) {
         throw std::runtime_error("Failed to create SteamVR Overlay with error " + std::string(vr::VROverlay()->GetOverlayErrorNameFromEnum(err)));
@@ -145,6 +149,12 @@ void TryCreateVrOverlay() {
     vr::VROverlay()->SetOverlayFlag(s_overlayMainHandle, vr::VROverlayFlags_SendVRDiscreteScrollEvents, true);
 
     // @TODO: Icon
+
+
+    //setup application manifest
+    vr::VRApplications()->AddApplicationManifest((getExecutableDir() + "\\manifest.vrmanifest").c_str(), false);
+    vr::VRApplications()->SetApplicationAutoLaunch(OPENVR_APPLICATION_KEY, true);
+
 }
 
 
@@ -266,8 +276,10 @@ void updateControllerState(controller_State& state, App_State& appState) {
 
 
 float getBoneCurl(HandSkeletonBone boneA, HandSkeletonBone boneB, controller_State &state){
-    vr::HmdQuaternionf_t a = state.boneTransforms[boneA].orientation;
-    vr::HmdQuaternionf_t b = state.boneTransforms[boneB].orientation;
+    vr::HmdVector4_t a = state.boneTransforms[boneA].position;
+    vr::HmdVector4_t b = state.boneTransforms[boneB].position;
+
+    float boneDistance = std::sqrt(std::pow((b.v - a.v), 2));
 
     return 1.0f;
 }
