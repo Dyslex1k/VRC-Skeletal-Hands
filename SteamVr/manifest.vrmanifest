@@ -1,0 +1,16 @@
+{
+    "source" : "builtin",
+    "applications": [{
+        "app_key": "Dyslex1k.VRCSkeletalHands",
+        "launch_type": "binary",
+        "binary_path_windows": ".\\VRCSkeletalHands.exe",
+        "is_dashboard_overlay": true,
+
+        "strings": {
+            "en_us": {
+                "name": "VRC Skeletal Hands",
+                "description": "App to forward Skeletal Input to Vrchat Via OSC"
+            }
+        }
+    }]
+}

@@ -1,0 +1,49 @@
+{
+  "default_bindings": [
+   {
+      "controller_type": "knuckles",
+      "binding_url": "defaultBindings.json"
+   }
+  ], 
+  "actions": [
+    {
+      "name": "/actions/main/in/LeftHand_Anim",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/left"
+    },
+    {
+      "name": "/actions/main/in/leftforce",
+      "requirement" : "suggested",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/main/in/RightHand_Anim",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/right"
+    },
+    {
+      "name": "/actions/main/in/rightforce",
+      "requirement" : "suggested",
+      "type": "vector1"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/main",
+      "usage": "leftright"
+    }
+  ],
+  "localization" : [
+   {
+       "language_tag": "en_US",
+
+        "/actions/main" : "Overlay Inputs",
+
+        "/actions/main/in/LeftHand_Anim" : "Skeleton Left",
+        "/actions/main/in/RightHand_Anim" : "Skeleton Right",
+
+        "/actions/main/in/leftforce" : "Left Pressure",
+        "/actions/main/in/rightforce" : "Right Pressure"
+    }
+  ]
+}

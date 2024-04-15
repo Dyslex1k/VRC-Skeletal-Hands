@@ -1,0 +1,60 @@
+{
+   "action_manifest_version" : 0,
+   "alias_info" : {},
+   "app_key" : "Dyslex1k.VRCSkeletalHands",
+   "bindings" : {
+      "/actions/main" : {
+         "skeleton" : [
+            {
+               "output" : "/actions/main/in/lefthand_anim",
+               "path" : "/user/hand/left/input/skeleton/left"
+            },
+            {
+               "output" : "/actions/main/in/righthand_anim",
+               "path" : "/user/hand/right/input/skeleton/right"
+            }
+         ],
+         "sources" : [
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/main/in/leftforce"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/main/in/rightforce"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {},
+               "mode" : "none",
+               "path" : "/user/hand/left/input/skeleton/left"
+            },
+            {
+               "inputs" : {},
+               "mode" : "none",
+               "path" : "/user/hand/right/input/skeleton/right"
+            }
+         ]
+      }
+   },
+   "category" : "steamvr_input",
+   "controller_type" : "knuckles",
+   "description" : "Knuckles input for OVR SDK",
+   "interaction_profile" : "",
+   "name" : "Offical Bindings",
+   "options" : {
+      "simulate_hmd" : true,
+      "simulate_rendermodel" : true,
+      "simulated_controller_type" : "knuckles"
+   },
+   "simulated_actions" : []
+}
