@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <math.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -13,6 +14,7 @@
 #include <hekky-osc.hpp>
 #include <openvr.h>
 #include "Overlay_app.h"
+#include "Maths.h"
 
 // Props for the overlay
 #define OPENVR_APPLICATION_KEY "Dyslex1k.VRCSkeletalHands"
@@ -275,13 +277,20 @@ void updateControllerState(controller_State& state, App_State& appState) {
 }
 
 
-float getBoneCurl(HandSkeletonBone boneA, HandSkeletonBone boneB, controller_State &state){
-    vr::HmdVector4_t a = state.boneTransforms[boneA].position;
-    vr::HmdVector4_t b = state.boneTransforms[boneB].position;
+//Thank you so much Lux/Hekky/Hyblocker (They did the maths) 
+/*@TODO Add in coming updates
+double getBoneCurl(HandSkeletonBone boneA, HandSkeletonBone boneB, controller_State &state){
+    static const vr::HmdVector3d_t UNIT_FORWARD = { {0.0,0.0,1.0} };
+    static const vr::HmdVector3d_t CLOSE_AXIS = pow(vr::HmdVector3d_t { -0.00620213, -0.66979522, 0.74251997 }, 1.0);
 
-    float boneDistance = std::sqrt(std::pow((b.v - a.v), 2));
+    auto boneAForward = normalize(UNIT_FORWARD * state.boneTransforms[boneA].orientation);
+    auto boneBForward = normalize((UNIT_FORWARD * state.boneTransforms[boneB].orientation) * CLOSE_AXIS);
 
-    return 1.0f;
+    //@TODO This aproximates curvature not curl!
+    //Fix . Want to 0 out axis that are not curl Same goes for splay
+    auto dotProd = dot(boneAForward, boneBForward);
+    double angle = radToDeg(acos(dotProd));
+    return angle;
 }
 
 float getBoneSplay(HandSkeletonBone bone, controller_State &state) {
@@ -301,32 +310,152 @@ void transformBoneData(controller_State &state) {
     //Calculate fingers from index -> pinky
 
     //Index
-    state.Hand.index.distal.curl = getBoneCurl(HandSkeletonBone::eBone_IndexFinger3, HandSkeletonBone::eBone_IndexFinger1, state);
-    state.Hand.index.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_IndexFinger3, HandSkeletonBone::eBone_Wrist, state);
-    state.Hand.index.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_IndexFinger1, state);
-
+    ///state.Hand.index.distal.curl = getBoneCurl(HandSkeletonBone::eBone_IndexFinger3, HandSkeletonBone::eBone_IndexFinger1, state);
+    ///state.Hand.index.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_IndexFinger3, HandSkeletonBone::eBone_Wrist, state);
+    ///state.Hand.index.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_IndexFinger1, state);
+    
     //Middle
-    state.Hand.middle.distal.curl = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_MiddleFinger1, state);
-    state.Hand.middle.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_Wrist, state);
-    state.Hand.middle.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_MiddleFinger1, state);
-
+    ///state.Hand.middle.distal.curl = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_MiddleFinger1, state);
+    ///state.Hand.middle.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_Wrist, state);
+    ///state.Hand.middle.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_MiddleFinger1, state);
+   
     //Ring
-    state.Hand.ring.distal.curl = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_RingFinger1, state);
-    state.Hand.ring.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_Wrist, state);
-    state.Hand.ring.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_RingFinger1, state);
-
+    ///state.Hand.ring.distal.curl = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_RingFinger1, state);
+    ///state.Hand.ring.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_Wrist, state);
+    ///state.Hand.ring.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_RingFinger1, state);
+    
     //Pinky
-    state.Hand.pinky.distal.curl = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_PinkyFinger1, state);
-    state.Hand.pinky.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_Wrist, state);
-    state.Hand.pinky.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_PinkyFinger1, state);
-}
+    ///state.Hand.pinky.distal.curl = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_PinkyFinger1, state);
+    ///state.Hand.pinky.proximal.curl = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_Wrist, state);
+    ///state.Hand.pinky.proximal.splay = getBoneSplay(HandSkeletonBone::eBone_PinkyFinger1, state);
+  
+    double test = getBoneCurl(HandSkeletonBone::eBone_IndexFinger0, HandSkeletonBone::eBone_IndexFinger1, state);
+    //state.fingerRotationB = getBoneCurl(HandSkeletonBone::eBone_MiddleFinger3, HandSkeletonBone::eBone_MiddleFinger0, state);
+    //state.fingerRotationC = getBoneCurl(HandSkeletonBone::eBone_RingFinger3, HandSkeletonBone::eBone_RingFinger0, state);
+    //state.fingerRotationD = getBoneCurl(HandSkeletonBone::eBone_PinkyFinger3, HandSkeletonBone::eBone_PinkyFinger0, state);
+} */
 
 void transformData(controller_State &state) {
     //@TODO Set all hand values Distal & Proximal Curl & Splay
+    //transformBoneData(state);
+
+
+    //Old method replace in future updates
+    state.Hand.thumb.distal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Thumb];
+    state.Hand.thumb.proximal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Thumb];
+    state.Hand.thumb.proximal.splay = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Thumb_Index];
+
+    state.Hand.index.distal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Index];
+    state.Hand.index.proximal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Index];
+    state.Hand.index.proximal.splay = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Index_Middle];
+
+    state.Hand.middle.distal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Middle];
+    state.Hand.middle.proximal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Middle];
+
+    state.Hand.ring.distal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Ring];
+    state.Hand.ring.proximal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Ring];
+    state.Hand.ring.proximal.splay = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Middle_Ring];
+
+    state.Hand.pinky.distal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Pinky];
+    state.Hand.pinky.proximal.curl = state.skeletonSumary.flFingerCurl[vr::VRFinger_Pinky];
+    state.Hand.pinky.proximal.splay = state.skeletonSumary.flFingerSplay[vr::VRFingerSplay_Ring_Pinky];
 }
 
-void sendOSCData(App_State &state) {
+void compressRemote(App_State& state, float rawValue) {
+    //int n = lround(remap(rawValue, 0.0, 1.0, 0, 15));
+    int n = lround(rawValue * 15.0);
+
+    //Convert claped values to bools that represent bianary
+    int binaryNum[4] = {};
+    int i = 0;
+
+    binaryNum[0] = (n & (1 << 0)) >> 0;
+    binaryNum[1] = (n & (1 << 1)) >> 1;
+    binaryNum[2] = (n & (1 << 2)) >> 2;
+    binaryNum[3] = (n & (1 << 3)) >> 3;
+
+    //Store number in bianary array
+    state.bool1 = binaryNum[0];
+    state.bool2 = binaryNum[1];
+    state.bool4 = binaryNum[2];
+    state.bool8 = binaryNum[3];
+}
+
+void pushRemote(App_State& state, const std::string& address) {
+    auto bool1 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "1")).PushBool(state.bool1);
+    state.oscSender->Send(bool1);
+
+    auto bool2 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "2")).PushBool(state.bool2);
+    state.oscSender->Send(bool2);
+
+    auto bool4 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "4")).PushBool(state.bool4);
+    state.oscSender->Send(bool4);
+
+    auto bool8 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "8")).PushBool(state.bool8);
+    state.oscSender->Send(bool8);
+}
+
+//Address needs to be boneType/Finger
+void pushData(App_State& state, controller_State& controller, float raw, const std::string& address, const std::string& hand, bool sendRemote) {
+
+    auto localData = hekky::osc::OscMessage(("/avatar/parameters/SH/Local/" + hand+ address)).PushFloat(raw);
+    state.oscSender->Send(localData);
+
+    if (sendRemote) {
+        compressRemote(state, raw);
+        pushRemote(state, address);
+    }
+}
+
+void sendOSCData(App_State& state, bool is_Left) {
     //@TODO Send data to the send parameters (Raw and Compressed) NOTE:Needs to be interlaced
+    auto interlace = hekky::osc::OscMessage("/avatar/parameters/SH/Control/Interlace/isLeft");
+    interlace.PushBool(is_Left);
+    state.oscSender->Send(interlace);
+
+    //Left Hand data send DISTAL
+    pushData(state, state.left, state.left.Hand.thumb.distal.curl, "Distal/Thumb", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.index.distal.curl, "Distal/Index", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.middle.distal.curl, "Distal/Middle", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.ring.distal.curl, "Distal/Ring", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.pinky.distal.curl, "Distal/Pinky", "Left", is_Left);
+
+    //PROXIMAL LEFT
+    pushData(state, state.left, state.left.Hand.thumb.proximal.curl, "Proximal/Thumb", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.index.proximal.curl, "Proximal/Index", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.middle.proximal.curl, "Proximal/Middle", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.ring.proximal.curl, "Proximal/Ring", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.pinky.proximal.curl, "Proximal/Pinky", "Left", is_Left);
+
+    //SPLAY LEFT
+    pushData(state, state.left, state.left.Hand.thumb.proximal.splay, "Splay/Thumb", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.index.proximal.splay, "Splay/Index", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.middle.proximal.splay, "Splay/Middle", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.ring.proximal.splay, "Splay/Ring", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.pinky.proximal.splay, "Splay/Pinky", "Left", is_Left);
+
+
+    //Right Hand
+    //DISTAL
+    pushData(state, state.right, state.right.Hand.thumb.distal.curl, "Distal/Thumb", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.index.distal.curl, "Distal/Index", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.middle.distal.curl, "Distal/Middle", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.ring.distal.curl, "Distal/Ring", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.pinky.distal.curl, "Distal/Pinky", "Right", !is_Left);
+    
+    //PROXIMAL RIGHT
+    pushData(state, state.right, state.right.Hand.thumb.proximal.curl, "Proximal/Thumb", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.index.proximal.curl, "Proximal/Index", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.middle.proximal.curl, "Proximal/Middle", "Right",!is_Left);
+    pushData(state, state.right, state.right.Hand.ring.proximal.curl, "Proximal/Ring", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.pinky.proximal.curl, "Proximal/Pinky", "Right", !is_Left);
+
+    //rightY RIGHT
+    pushData(state, state.right, state.right.Hand.thumb.proximal.splay, "Splay/Thumb", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.index.proximal.splay, "Splay/Index", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.middle.proximal.splay, "Splay/Middle", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.ring.proximal.splay, "Splay/Ring", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.pinky.proximal.splay, "Splay/Pinky", "Right", !is_Left);
 }
 
 #ifdef _DEBUG
@@ -341,19 +470,30 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
     InitVR(state);
 
+
 	if (EpicOverlay::Overlay::StartWindow()) {
 		bool doExectute = true;
+        bool interlaceLeft = true;
 		while (doExectute) {
             TryCreateVrOverlay();
             updateSteamVrState(state);
             TryFindController(state);
+
+            //Update controller states for openVr
             updateControllerState(state.left, state);
             updateControllerState(state.right, state);
+
+            //Saves hand trackingData
             transformData(state.left);
             transformData(state.right);
-            sendOSCData(state);
+            sendOSCData(state, interlaceLeft);
 
 			doExectute = EpicOverlay::Overlay::UpdateNativeWindow(s_overlayMainHandle, state);
+
+            //Inverts interlace so other hand syncs next frame
+            interlaceLeft = !interlaceLeft;
+
+            //Add sleep to slow refresh rate
             Sleep(8);
 		}
 		EpicOverlay::Overlay::DestroyWindow();

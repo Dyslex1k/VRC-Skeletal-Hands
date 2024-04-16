@@ -46,6 +46,7 @@ enum HandSkeletonBone : vr::BoneIndex_t
 struct controller_State {
 	uint32_t deviceIndex;
 	bool is_connected;
+	bool is_Left;
 
 	vr::VRSkeletalSummaryData_t skeletonSumary;
 	vr::InputSkeletalActionData_t skeletalData;
@@ -92,5 +93,10 @@ public:
 	std::unique_ptr<hekky::osc::UdpSender> oscSender;
 	controller_State left;
 	controller_State right;
+
+	bool bool1;
+	bool bool2;
+	bool bool4;
+	bool bool8;
 };
 

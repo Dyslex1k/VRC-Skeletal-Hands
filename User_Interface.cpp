@@ -23,11 +23,11 @@ void drawDataTable(controller_State state) {
 		ImGui::TableNextRow();
 		ImGui::TableNextColumn();
 
-		//buildInternal(state.Curl.thumb, state.Splay.thumb, "Thumb");
-		//buildInternal(state.Curl.index, state.Splay.index, "Index");
-		//buildInternal(state.Curl.middle, state.Splay.middle, "Middle");
-		//buildInternal(state.Curl.ring, state.Splay.ring, "Ring");
-		//buildInternal(state.Curl.pinky, state.Splay.pinky, "Pinky");
+		buildInternal(state.Hand.thumb.distal.curl, state.Hand.thumb.proximal.curl, "Thumb");
+		buildInternal(state.Hand.index.distal.curl, state.Hand.index.proximal.curl, "Index");
+		buildInternal(state.Hand.middle.distal.curl, state.Hand.middle.proximal.curl, "Middle");
+		buildInternal(state.Hand.ring.distal.curl, state.Hand.ring.proximal.curl, "Ring");
+		buildInternal(state.Hand.pinky.distal.curl, state.Hand.pinky.proximal.curl, "Pinky");
 
 	}
 	ImGui::EndTable();
@@ -52,7 +52,11 @@ void drawController(controller_State state, bool isLeft) {
 }
 
 void DrawUi(bool isOverlay, App_State& state){
+
+#if _DEBUG 
 	ImGui::ShowDemoWindow();
+#endif
+
 	bool skeletalHandsActive = true;
 	const ImGuiIO& io = ImGui::GetIO();
 	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f), ImGuiCond_Always);
@@ -60,17 +64,17 @@ void DrawUi(bool isOverlay, App_State& state){
 
 	ImGui::Begin("VRC Skeletal Hands", &skeletalHandsActive, 1);
 
-	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.x);
+	ImGui::Text("Binary[1]: %.1f", state.bool1);
 	ImGui::Spacing();
-	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.y);
+	ImGui::Text("Binary[2]: %.1f", state.bool2);
 	ImGui::Spacing();
-	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.z);
+	ImGui::Text("Binary[3]: %.1f", state.bool4);
 	ImGui::Spacing();
-	ImGui::Text(": %.2f", state.left.boneTransforms[HandSkeletonBone::eBone_IndexFinger1].orientation.w);
+	ImGui::Text("Binary[4]: %.1f", state.bool8);
 	ImGui::Spacing();
 
-	//drawController(state.left, true);
-	//drawController(state.right, false);
+	drawController(state.left, true);
+	drawController(state.right, false);
 
 	ImGui::End();
 }
