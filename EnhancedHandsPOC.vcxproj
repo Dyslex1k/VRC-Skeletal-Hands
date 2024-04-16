@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="App_State.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Maths.cpp" />
     <ClCompile Include="Overlay_app.cpp" />
     <ClCompile Include="User_Interface.cpp" />
     <ClCompile Include="Vendor\imgui\backends\imgui_impl_dx11.cpp" />
@@ -154,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App_State.h" />
+    <ClInclude Include="Maths.h" />
     <ClInclude Include="Overlay_app.h" />
     <ClInclude Include="User_Interface.h" />
   </ItemGroup>

@@ -48,6 +48,9 @@
     <ClCompile Include="App_State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Maths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Overlay_app.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="App_State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Maths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
