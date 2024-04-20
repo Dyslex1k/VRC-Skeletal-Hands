@@ -382,16 +382,16 @@ void compressRemote(App_State& state, float rawValue) {
 }
 
 void pushRemote(App_State& state, const std::string& address) {
-    auto bool1 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "1")).PushBool(state.bool1);
+    auto bool1 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool" + address + "1")).PushBool(state.bool1);
     state.oscSender->Send(bool1);
 
-    auto bool2 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "2")).PushBool(state.bool2);
+    auto bool2 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool" + address + "2")).PushBool(state.bool2);
     state.oscSender->Send(bool2);
 
-    auto bool4 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "4")).PushBool(state.bool4);
+    auto bool4 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool" + address + "4")).PushBool(state.bool4);
     state.oscSender->Send(bool4);
 
-    auto bool8 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool/" + address + "8")).PushBool(state.bool8);
+    auto bool8 = hekky::osc::OscMessage(("/avatar/parameters/SH/Interlace/bool" + address + "8")).PushBool(state.bool8);
     state.oscSender->Send(bool8);
 }
 
@@ -401,6 +401,7 @@ void pushData(App_State& state, controller_State& controller, float raw, const s
     auto localData = hekky::osc::OscMessage(("/avatar/parameters/SH/Local/" + hand+ address)).PushFloat(raw);
     state.oscSender->Send(localData);
 
+
     if (sendRemote) {
         compressRemote(state, raw);
         pushRemote(state, address);
@@ -409,53 +410,54 @@ void pushData(App_State& state, controller_State& controller, float raw, const s
 
 void sendOSCData(App_State& state, bool is_Left) {
     //@TODO Send data to the send parameters (Raw and Compressed) NOTE:Needs to be interlaced
+
     auto interlace = hekky::osc::OscMessage("/avatar/parameters/SH/Control/Interlace/isLeft");
     interlace.PushBool(is_Left);
     state.oscSender->Send(interlace);
 
     //Left Hand data send DISTAL
-    pushData(state, state.left, state.left.Hand.thumb.distal.curl, "Distal/Thumb", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.index.distal.curl, "Distal/Index", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.middle.distal.curl, "Distal/Middle", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.ring.distal.curl, "Distal/Ring", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.pinky.distal.curl, "Distal/Pinky", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.thumb.distal.curl, "/Distal/Thumb", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.index.distal.curl, "/Distal/Index", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.middle.distal.curl, "/Distal/Middle", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.ring.distal.curl, "/Distal/Ring", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.pinky.distal.curl, "/Distal/Pinky", "Left", is_Left);
 
     //PROXIMAL LEFT
-    pushData(state, state.left, state.left.Hand.thumb.proximal.curl, "Proximal/Thumb", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.index.proximal.curl, "Proximal/Index", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.middle.proximal.curl, "Proximal/Middle", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.ring.proximal.curl, "Proximal/Ring", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.pinky.proximal.curl, "Proximal/Pinky", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.thumb.proximal.curl, "/Proximal/Thumb", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.index.proximal.curl, "/Proximal/Index", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.middle.proximal.curl, "/Proximal/Middle", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.ring.proximal.curl, "/Proximal/Ring", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.pinky.proximal.curl, "/Proximal/Pinky", "Left", is_Left);
 
     //SPLAY LEFT
-    pushData(state, state.left, state.left.Hand.thumb.proximal.splay, "Splay/Thumb", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.index.proximal.splay, "Splay/Index", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.middle.proximal.splay, "Splay/Middle", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.ring.proximal.splay, "Splay/Ring", "Left", is_Left);
-    pushData(state, state.left, state.left.Hand.pinky.proximal.splay, "Splay/Pinky", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.thumb.proximal.splay, "/Splay/Thumb", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.index.proximal.splay, "/Splay/Index", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.middle.proximal.splay, "/Splay/Middle", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.ring.proximal.splay, "/Splay/Ring", "Left", is_Left);
+    pushData(state, state.left, state.left.Hand.pinky.proximal.splay, "/Splay/Pinky", "Left", is_Left);
 
 
     //Right Hand
     //DISTAL
-    pushData(state, state.right, state.right.Hand.thumb.distal.curl, "Distal/Thumb", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.index.distal.curl, "Distal/Index", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.middle.distal.curl, "Distal/Middle", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.ring.distal.curl, "Distal/Ring", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.pinky.distal.curl, "Distal/Pinky", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.thumb.distal.curl, "/Distal/Thumb", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.index.distal.curl, "/Distal/Index", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.middle.distal.curl, "/Distal/Middle", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.ring.distal.curl, "/Distal/Ring", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.pinky.distal.curl, "/Distal/Pinky", "Right", !is_Left);
     
     //PROXIMAL RIGHT
-    pushData(state, state.right, state.right.Hand.thumb.proximal.curl, "Proximal/Thumb", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.index.proximal.curl, "Proximal/Index", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.middle.proximal.curl, "Proximal/Middle", "Right",!is_Left);
-    pushData(state, state.right, state.right.Hand.ring.proximal.curl, "Proximal/Ring", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.pinky.proximal.curl, "Proximal/Pinky", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.thumb.proximal.curl, "/Proximal/Thumb", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.index.proximal.curl, "/Proximal/Index", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.middle.proximal.curl, "/Proximal/Middle", "Right",!is_Left);
+    pushData(state, state.right, state.right.Hand.ring.proximal.curl, "/Proximal/Ring", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.pinky.proximal.curl, "/Proximal/Pinky", "Right", !is_Left);
 
     //rightY RIGHT
-    pushData(state, state.right, state.right.Hand.thumb.proximal.splay, "Splay/Thumb", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.index.proximal.splay, "Splay/Index", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.middle.proximal.splay, "Splay/Middle", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.ring.proximal.splay, "Splay/Ring", "Right", !is_Left);
-    pushData(state, state.right, state.right.Hand.pinky.proximal.splay, "Splay/Pinky", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.thumb.proximal.splay, "/Splay/Thumb", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.index.proximal.splay, "/Splay/Index", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.middle.proximal.splay, "/Splay/Middle", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.ring.proximal.splay, "/Splay/Ring", "Right", !is_Left);
+    pushData(state, state.right, state.right.Hand.pinky.proximal.splay, "/Splay/Pinky", "Right", !is_Left);
 }
 
 #ifdef _DEBUG
