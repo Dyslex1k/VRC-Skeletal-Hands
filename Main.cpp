@@ -401,19 +401,22 @@ void pushData(App_State& state, controller_State& controller, float raw, const s
     auto localData = hekky::osc::OscMessage(("/avatar/parameters/SH/Local/" + hand+ address)).PushFloat(raw);
     state.oscSender->Send(localData);
 
-
     if (sendRemote) {
         compressRemote(state, raw);
         pushRemote(state, address);
     }
 }
 
-void sendOSCData(App_State& state, bool is_Left) {
+void sendOSCData(App_State& state, bool is_Left, bool is_Right) {
     //@TODO Send data to the send parameters (Raw and Compressed) NOTE:Needs to be interlaced
 
-    auto interlace = hekky::osc::OscMessage("/avatar/parameters/SH/Control/Interlace/isLeft");
-    interlace.PushBool(is_Left);
-    state.oscSender->Send(interlace);
+    auto interlaceLeft = hekky::osc::OscMessage("/avatar/parameters/SH/Control/Interlace/isLeft");
+    interlaceLeft.PushBool(is_Left);
+    state.oscSender->Send(interlaceLeft);
+
+    auto interlaceRight = hekky::osc::OscMessage("/avatar/parameters/SH/Control/Interlace/isRight");
+    interlaceRight.PushBool(is_Right);
+    state.oscSender->Send(interlaceRight);
 
     //Left Hand data send DISTAL
     pushData(state, state.left, state.left.Hand.thumb.distal.curl, "/Distal/Thumb", "Left", is_Left);
@@ -475,7 +478,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	if (EpicOverlay::Overlay::StartWindow()) {
 		bool doExectute = true;
+
+        //Here so that the animator can function without any mojor latency
         bool interlaceLeft = true;
+        bool interlaceRight = false;
+
 		while (doExectute) {
             TryCreateVrOverlay();
             updateSteamVrState(state);
@@ -488,12 +495,13 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
             //Saves hand trackingData
             transformData(state.left);
             transformData(state.right);
-            sendOSCData(state, interlaceLeft);
+            sendOSCData(state, interlaceLeft, interlaceRight);
 
 			doExectute = EpicOverlay::Overlay::UpdateNativeWindow(s_overlayMainHandle, state);
 
             //Inverts interlace so other hand syncs next frame
             interlaceLeft = !interlaceLeft;
+            interlaceRight = !interlaceRight;
 
             //Add sleep to slow refresh rate
             Sleep(8);
